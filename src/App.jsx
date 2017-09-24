@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import getSocket from './getSocket';
+import { addMessage } from './messages';
 
 class App extends React.Component {
   constructor() {
@@ -52,14 +53,6 @@ class App extends React.Component {
   }
 }
 
-export const ADD_MESSAGE = 'add_message';
-
-export const addMessage = (message) => {
-  return {
-    type: ADD_MESSAGE,
-    message,
-  }
-}
 
 const mapDispatchToProps = dispatch => {
   return {
