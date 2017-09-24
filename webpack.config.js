@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /*
  * We've enabled UglifyJSPlugin for you! This minifies your app
@@ -30,17 +31,17 @@ const autoprefixer = require('autoprefixer');
 const precss = require('precss');
 
 module.exports = {
-	entry: 'index.js',
+	entry: './index.js',
 
 	output: {
 		filename: '[name].bundle.js',
-		path: 'public'
+		path: path.resolve('./public')
 	},
 
 	module: {
 		rules: [
 			{
-				test: /\.js$/,
+				test: /\.js(x)?$/,
 				exclude: /node_modules/,
 				loader: 'babel-loader',
 
@@ -77,5 +78,11 @@ module.exports = {
 		]
 	},
 
-	plugins: [new UglifyJSPlugin()]
+	plugins: [
+		new UglifyJSPlugin(),
+		new HtmlWebpackPlugin({
+			title: "Game Dude",
+			template: "./index.ejs",
+		})
+	]
 };
