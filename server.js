@@ -3,7 +3,7 @@ const http = require('http');
 const url = require('url');
 const WebSocket = require('ws');
 
-const isOpen = ({ readyState }) => readyState !== WebSocket.OPEN;
+const isOpen = ({ readyState }) => readyState === WebSocket.OPEN;
 
 const app = express();
 
@@ -22,6 +22,7 @@ socketServer.on('connection', (ws, req) => {
     socketServer.clients.forEach(client => {
       // don't rebroadcast to yourself!
       if (client !== ws && isOpen(client)) {
+        console.log(`sending to all: ${message}`);
         client.send(message);
       }
     });
@@ -31,6 +32,7 @@ socketServer.on('connection', (ws, req) => {
 socketServer.broadcast = function broadcast (data) {
   socketServer.clients.forEach(client => {
     if (isOpen(client)) {
+      console.log(`broadcasting: ${message}`);
       client.send(data);
     }
   })

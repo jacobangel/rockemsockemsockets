@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import client from './ws-client';
+import getSocket from './getSocket';
 
 class App extends React.Component {
   constructor() {
@@ -10,7 +10,11 @@ class App extends React.Component {
 
   componentDidMount() {
     if (!this.socket) {
-      this.socket = client(this.props.onSendClick);
+      this.socket = getSocket({
+        onMessage: (evt) => {
+          this.props.onSendClick(evt.data);
+        },
+      });
     }
   }
 
@@ -22,7 +26,6 @@ class App extends React.Component {
   }
 
   sendMessage(e) {
-    console.log('sup', this.text.value);
     this.socket.send(this.text.value);
     this.props.onSendClick(this.text.value);
   }
@@ -69,7 +72,6 @@ const mapDispatchToProps = dispatch => {
 const getResponses = responses => ([... responses]);
 
 const mapStateToProps = state => {
-  console.log(state);
   return {
     messages: getResponses(state.messages)
   }
