@@ -1,20 +1,35 @@
 import client from './src/ws-client';
-const addLi = (message) => {
-  const li = document.createElement('li');
-  li.innerHTML = message;
-  document.querySelector('ul').appendChild(li);
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createStore } from 'redux'
+import App, { ADD_MESSAGE, addMessage } from './src/App.jsx';
+import { combineReducers } from 'redux'
+
+
+let store = createStore(combineReducers({
+  messages: (state = [], action) => {
+    switch(action.type) {
+      case 'add_message':
+      return [
+        ...state,
+        action.message
+      ]
+    }
+    return state;
+  }
+}))
+
+let render = () => {
+  ReactDOM.render(
+    <App 
+      store={store} 
+      socket={client((data) => {
+        console.log('opew');
+        store.dispatch(addMessage(data.data));
+      })}
+    />,
+    document.querySelector('#root')
+  );
 }
 
-const ws = client();
-
-ws.onmessage = (data) => {
-  console.log(data);
-  addLi(data.data);
-};
-
-const button = document.querySelector('button').addEventListener('click', ()=> {
-  const value = document.querySelector('input').value;
-  console.log(value);
-  addLi(value);
-  ws.send(value);
-}, false);
+render();

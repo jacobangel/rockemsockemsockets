@@ -1,5 +1,4 @@
-
-function initSocket() {
+function initSocket(cb) {
 
   const socket = new WebSocket(`ws://${location.host}`);
 

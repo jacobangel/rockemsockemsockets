@@ -46,7 +46,7 @@ module.exports = {
 				loader: 'babel-loader',
 
 				options: {
-					presets: ['es2015']
+					presets: ["stage-3", "es2015", "react"]
 				}
 			},
 			{
@@ -79,7 +79,7 @@ module.exports = {
 	},
 
 	plugins: [
-		new UglifyJSPlugin(),
+	// 	new UglifyJSPlugin(),
 		new HtmlWebpackPlugin({
 			title: "Game Dude",
 			template: "./index.ejs",
