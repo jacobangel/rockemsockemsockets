@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import getSocket from './getSocket';
-import { addMessage } from './messages';
+import { addMessage, getMessages } from './messages';
 
 class App extends React.Component {
   constructor() {
@@ -17,6 +17,7 @@ class App extends React.Component {
         },
       });
     }
+    this.props.getMessages();
   }
 
   componentWillUnmount() {
@@ -34,6 +35,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        {this.props.isLoading && <div style={{ color: 'red' }}>LOADING</div>}
         <div>
           <input type="text" ref={el => { this.text = el }} />
           <button onClick={this.sendMessage}>Send Message!!</button>
@@ -59,14 +61,18 @@ const mapDispatchToProps = dispatch => {
     onSendClick: message => { 
       dispatch(addMessage(message))
     },
+    getMessages: () => { getMessages(dispatch)}
   }
 };
 
-const getResponses = responses => ([... responses]);
+const getResponses = ({
+  messages
+}) => ([...messages]);
 
 const mapStateToProps = state => {
   return {
-    messages: getResponses(state.messages)
+    messages: getResponses(state.messages),
+    isLoading: state.messages.isLoading,
   }
 }
 
